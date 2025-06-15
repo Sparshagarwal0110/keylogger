@@ -88,7 +88,7 @@ Use this tool to:
 ## 📄 License
 
 MIT License  
-© 2025 [Your Name]
+© 2025 Sparsh Agarwal
 
 ---
 

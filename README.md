@@ -21,6 +21,7 @@ A **proof-of-concept (PoC)** project demonstrating an encrypted keylogger writte
   ```bash
   pip install cryptography pynput
 🚀 How to Use
+
 🔹 1. Start the Local Server
 python keylogger.py --server
 Simulates exfiltration of encrypted keystroke data.

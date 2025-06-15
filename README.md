@@ -1,71 +1,98 @@
-🔐 Encrypted Keylogger with Log Decryption Tool
-A proof-of-concept (PoC) project demonstrating an encrypted keylogger written in Python with optional local data exfiltration and a decryption script.
-Strictly for educational and cybersecurity awareness purposes.
+# 🔐 Encrypted Keylogger with Log Decryption Tool
 
-⚠️ DISCLAIMER
-This project is intended solely for educational, ethical hacking, or cybersecurity research purposes.
-Do not use this software to monitor or log keystrokes on devices you do not own or without clear, informed consent.
-Misuse of this tool can be illegal and unethical.
+A **proof-of-concept (PoC)** Python project demonstrating a secure keylogger with encrypted logging, optional local data exfiltration, and a decryption utility.
 
-🔧 Requirements
-Python 3.7+
+> ⚠️ **Strictly for educational and cybersecurity awareness purposes only.**
 
-Install dependencies:
+---
 
+## ⚠️ Disclaimer
 
+This project is intended **only for ethical hacking, educational, or research use**.
+
+- ❌ **Do NOT** use this software on devices you do not own or without explicit consent.
+- ⚠️ Unauthorized use may violate privacy laws and ethical standards.
+
+---
+
+## 📦 Requirements
+
+- Python 3.7 or higher
+- Install dependencies:
+
+```bash
 pip install cryptography pynput
-🚀 How to Use
-🔹 1. Start the Local Server (Optional)
-Simulates exfiltration of encrypted keystroke data:
+```
 
+---
 
+## 🚀 Getting Started
+
+### 1️⃣ Start the Local Server (Optional)
+
+Simulate data exfiltration to a local server:
+
+```bash
 python keylogger.py --server
-🔹 2. Run the Keylogger
+```
 
+### 2️⃣ Run the Keylogger
+
+```bash
 python keylogger.py
-Logs all keystrokes and encrypts them using cryptography.Fernet.
+```
 
-Press ESC to stop the keylogger.
+- Starts capturing and encrypting keystrokes.
+- Press `ESC` to stop.
+- Encrypted logs are saved to `keylog.enc`.
 
-Encrypted logs are saved to keylog.enc.
+### 3️⃣ Decrypt the Logs
 
-🔹 3. Decrypt the Logs
-
+```bash
 python decrypt.py
-Decrypted output is saved to decrypted_keylogs.txt.
+```
 
-🔐 How It Works
-A Fernet symmetric encryption key is generated and saved in secret.key.
+- Decrypted logs are saved to `decrypted_keylogs.txt`.
 
-Each log entry (timestamp + keys) is encrypted and stored in keylog.enc.
+---
 
-Optionally, the logs are sent to a local server over a socket connection.
+## 🔍 How It Works
 
-The decrypt.py script decrypts the logs back into plaintext.
+- A **Fernet symmetric key** is generated on first run and saved to `secret.key`.
+- Logged keystrokes are timestamped, encrypted, and saved in `keylog.enc`.
+- Optionally, encrypted logs are sent to a local socket server at `127.0.0.1:5000`.
+- The `decrypt.py` script reads and decrypts the logs using the same key.
 
-📌 Features
-🔐 Strong encryption with cryptography.Fernet
+---
 
-📅 Timestamps for each log entry
+## ✅ Features
 
-📤 Optional socket-based exfiltration to localhost
+- 🔐 AES-128-based encryption with `cryptography.Fernet`
+- ⏱️ Timestamped logging
+- 📤 Optional local exfiltration via sockets
+- 🛑 `ESC` key to safely stop logging
+- 📂 Decryption script included
 
-🛑 ESC key kill switch
+---
 
-💾 Log decryption utility included
+## 🧠 For Researchers & Educators
 
-📎 For Researchers & Educators
-This project can be used to:
+Use this tool to:
 
-Understand secure logging and encryption techniques
+- Understand encrypted logging mechanisms
+- Simulate malware behavior in a lab environment
+- Learn about basic cybersecurity and ethical hacking techniques
 
-Study ethical keylogging and forensics in a controlled environment
+---
 
-Demonstrate basic concepts of data exfiltration for red teaming simulations
+## 📄 License
 
-📄 License
-MIT License
-© 2025 Sparsh Agarwal
+MIT License  
+© 2025 [Your Name]
 
-✉️ Contact
-Feel free to open an issue or submit a pull request for suggestions or contributions.
+---
+
+## 🙋‍♂️ Contact
+
+Have suggestions, improvements, or questions?  
+Feel free to open an issue or submit a pull request.
